@@ -68,9 +68,28 @@ export default function SwipeCard({ relief, onSwipe, exitDirection, style, showA
       animate={{ x: getExitX() }}
       exit={{ x: getExitX(), opacity: 0 }}
       transition={{ duration: 0.3 }}
-      className="absolute w-full max-w-md cursor-grab active:cursor-grabbing touch-manipulation"
+      className="absolute w-full max-w-[90%] sm:max-w-[400px] cursor-grab active:cursor-grabbing touch-manipulation"
     >
-      <div className="bg-white rounded-3xl shadow-2xl p-6 select-none">
+      <div className="bg-white rounded-3xl shadow-2xl p-6 select-none relative">
+        {/* Exit Animations - Big X and Checkmark */}
+        {exitDirection && (
+          <motion.div
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="absolute inset-0 flex items-center justify-center z-50 pointer-events-none"
+          >
+            {exitDirection === 'left' ? (
+              <div className="text-[200px] leading-none font-bold text-red-500" style={{ textShadow: '0 0 20px rgba(239, 68, 68, 0.5)' }}>
+                ✕
+              </div>
+            ) : (
+              <div className="text-[200px] leading-none font-bold text-green-500" style={{ textShadow: '0 0 20px rgba(34, 197, 94, 0.5)' }}>
+                ✓
+              </div>
+            )}
+          </motion.div>
+        )}
+
         {/* Swipe Indicators */}
         <div className="absolute top-4 left-4 right-4 flex justify-between pointer-events-none">
           <motion.div

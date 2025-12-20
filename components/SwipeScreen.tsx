@@ -120,7 +120,7 @@ export default function SwipeScreen({ reliefs, onComplete, onBack }: SwipeScreen
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50 flex flex-col">
       {/* Progress Bar */}
-      <div className="bg-white shadow-sm p-4">
+      <div className="sticky top-0 bg-white shadow-sm p-4 z-40">
         <div className="max-w-md mx-auto">
           <div className="flex justify-between text-sm text-gray-600 mb-2">
             <span>Card {currentIndex + 1} of {reliefs.length}</span>
@@ -176,30 +176,32 @@ export default function SwipeScreen({ reliefs, onComplete, onBack }: SwipeScreen
       {/* Button Controls - Fixed at bottom for mobile */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 safe-area-bottom shadow-lg z-50">
         <div className="max-w-md mx-auto">
-          <div className="flex gap-4 mb-2">
+          <div className="flex gap-3 items-center">
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => handleSwipe('left')}
-              className="flex-1 bg-red-100 text-red-600 font-bold py-4 px-6 rounded-xl hover:bg-red-200 transition-colors"
+              className="flex-1 bg-red-100 text-red-600 font-bold py-3 px-4 rounded-xl hover:bg-red-200 transition-colors text-sm"
             >
               ← Skip
             </motion.button>
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              onClick={onBack}
+              className="flex-1 bg-gray-100 text-gray-700 font-semibold py-3 px-4 rounded-xl hover:bg-gray-200 transition-colors text-sm"
+            >
+              Back
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={() => handleSwipe('right')}
-              className="flex-1 bg-green-500 text-white font-bold py-4 px-6 rounded-xl hover:bg-green-600 transition-colors shadow-lg"
+              className="flex-1 bg-green-500 text-white font-bold py-3 px-4 rounded-xl hover:bg-green-600 transition-colors shadow-lg text-sm"
             >
               {reliefs[currentIndex]?.id === 'individual_self' ? 'Next →' : 'Claim →'}
             </motion.button>
           </div>
-          <button
-            onClick={onBack}
-            className="w-full text-gray-600 font-semibold py-2 hover:text-gray-800 transition-colors"
-          >
-            ← Back
-          </button>
         </div>
       </div>
     </div>
