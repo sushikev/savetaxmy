@@ -170,22 +170,6 @@ export default function SwipeCard({ relief, onSwipe, exitDirection, style, showA
                 </div>
               </div>
 
-              {/* Slider */}
-              <input
-                type="range"
-                min="0"
-                max={relief.maxAmount}
-                step="100"
-                value={currentAmount}
-                onChange={(e) => handleSliderChange(parseInt(e.target.value))}
-                onClick={(e) => e.stopPropagation()}
-                onPointerDown={(e) => e.stopPropagation()}
-                className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
-                style={{
-                  background: `linear-gradient(to right, #10B981 0%, #10B981 ${(currentAmount / relief.maxAmount) * 100}%, #E5E7EB ${(currentAmount / relief.maxAmount) * 100}%, #E5E7EB 100%)`,
-                }}
-              />
-
               {/* Quick Amount Buttons */}
               <div className="flex gap-2 mt-3">
                 <button
@@ -229,28 +213,6 @@ export default function SwipeCard({ relief, onSwipe, exitDirection, style, showA
           )}
         </div>
       </div>
-
-      <style jsx>{`
-        .slider::-webkit-slider-thumb {
-          appearance: none;
-          width: 20px;
-          height: 20px;
-          border-radius: 50%;
-          background: #10B981;
-          cursor: pointer;
-          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        .slider::-moz-range-thumb {
-          width: 20px;
-          height: 20px;
-          border-radius: 50%;
-          background: #10B981;
-          cursor: pointer;
-          border: none;
-          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-      `}</style>
     </motion.div>
   );
 }
