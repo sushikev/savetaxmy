@@ -180,7 +180,7 @@ export default function ResultsScreen({
             onClick={onBack}
             className="w-full text-gray-600 font-semibold py-3 hover:text-gray-800 transition-colors"
           >
-            ← Back to Edit Amounts
+            ← Back to Swipe
           </button>
 
           <div className="bg-white rounded-xl p-4 text-center">

@@ -7,7 +7,6 @@ import { calculateTax } from '@/lib/taxCalculator';
 import WelcomeScreen from '@/components/WelcomeScreen';
 import IncomeInput from '@/components/IncomeInput';
 import SwipeScreen from '@/components/SwipeScreen';
-import AmountCollection from '@/components/AmountCollection';
 import ResultsScreen from '@/components/ResultsScreen';
 
 const STORAGE_KEY = 'taxkaki_state';
@@ -54,35 +53,10 @@ export default function Home() {
   };
 
   const handleSwipeComplete = (swipedData: { [key: string]: 'left' | 'right' }, swipeAmounts?: { [key: string]: number }) => {
-    const claimedReliefs = taxReliefs.filter(
-      (relief) => swipedData[relief.id] === 'right'
-    );
-
-    if (claimedReliefs.length === 0) {
-      // No reliefs claimed, go straight to results with zero reliefs
-      const calculation = calculateTax(appState.income, []);
-      setAppState((prev) => ({
-        ...prev,
-        swipedCards: swipedData,
-        calculation,
-        currentStep: 'results',
-      }));
-    } else {
-      setAppState((prev) => ({
-        ...prev,
-        swipedCards: swipedData,
-        reliefAmounts: swipeAmounts || {},
-        currentStep: 'amounts',
-      }));
-    }
-  };
-
-  const handleAmountsComplete = (amounts: { [key: string]: number }) => {
-    // Merge amounts from swipe and amounts collection
-    const finalAmounts = { ...appState.reliefAmounts, ...amounts };
-
+    // Build claimed reliefs with amounts from swipe phase
+    const finalAmounts = swipeAmounts || {};
     const claimedReliefs: ClaimedRelief[] = taxReliefs
-      .filter((relief) => appState.swipedCards[relief.id] === 'right')
+      .filter((relief) => swipedData[relief.id] === 'right')
       .map((relief) => ({
         relief,
         amount: finalAmounts[relief.id] || relief.commonAmount,
@@ -93,6 +67,7 @@ export default function Home() {
 
     setAppState((prev) => ({
       ...prev,
+      swipedCards: swipedData,
       reliefAmounts: finalAmounts,
       calculation,
       currentStep: 'results',
@@ -119,18 +94,10 @@ export default function Home() {
     setAppState((prev) => ({ ...prev, currentStep: 'income' }));
   };
 
-  const handleBackFromAmounts = () => {
-    setAppState((prev) => ({ ...prev, currentStep: 'swipe' }));
-  };
-
   const handleBackFromResults = () => {
-    // Go back to amounts if there were reliefs, otherwise to swipe
-    const hasReliefs = Object.keys(appState.swipedCards).some(
-      (key) => appState.swipedCards[key] === 'right'
-    );
     setAppState((prev) => ({
       ...prev,
-      currentStep: hasReliefs ? 'amounts' : 'swipe',
+      currentStep: 'swipe',
     }));
   };
 
@@ -153,19 +120,6 @@ export default function Home() {
           reliefs={taxReliefs}
           onComplete={handleSwipeComplete}
           onBack={handleBackFromSwipe}
-        />
-      );
-
-    case 'amounts':
-      const claimedReliefs = taxReliefs.filter(
-        (relief) => appState.swipedCards[relief.id] === 'right'
-      );
-      return (
-        <AmountCollection
-          claimedReliefs={claimedReliefs}
-          onComplete={handleAmountsComplete}
-          onBack={handleBackFromAmounts}
-          initialAmounts={appState.reliefAmounts}
         />
       );
 

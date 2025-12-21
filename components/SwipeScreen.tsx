@@ -28,9 +28,10 @@ export default function SwipeScreen({ reliefs, onComplete, onBack }: SwipeScreen
     setSwipedCards(newSwipedCards);
     setExitingCard({ relief: currentRelief, direction });
 
-    // For child_under_18 and child_disabled, automatically apply full amount when swiped right
+    // Auto-apply full amount for certain reliefs when swiped right
     let finalAmount = amount;
-    if ((currentRelief.id === 'child_under_18' || currentRelief.id === 'child_disabled') && direction === 'right') {
+    const autoAppliedReliefs = ['individual_self', 'disabled_spouse', 'child_under_18', 'child_disabled'];
+    if (autoAppliedReliefs.includes(currentRelief.id) && direction === 'right') {
       finalAmount = currentRelief.maxAmount;
     }
 
@@ -145,7 +146,7 @@ export default function SwipeScreen({ reliefs, onComplete, onBack }: SwipeScreen
               relief={exitingCard.relief}
               onSwipe={() => {}}
               exitDirection={exitingCard.direction}
-              showAmountInput={reliefs.findIndex(r => r.id === exitingCard.relief.id) >= 4 && exitingCard.relief.id !== 'child_under_18' && exitingCard.relief.id !== 'child_disabled'}
+              showAmountInput={!['individual_self', 'disabled_spouse', 'child_under_18', 'child_disabled'].includes(exitingCard.relief.id)}
               style={{
                 zIndex: reliefs.length,
               }}
@@ -159,7 +160,7 @@ export default function SwipeScreen({ reliefs, onComplete, onBack }: SwipeScreen
                 relief={relief}
                 onSwipe={idx === 0 ? handleSwipe : () => {}}
                 exitDirection={null}
-                showAmountInput={reliefIndex >= 4 && relief.id !== 'child_under_18' && relief.id !== 'child_disabled'}
+                showAmountInput={!['individual_self', 'disabled_spouse', 'child_under_18', 'child_disabled'].includes(relief.id)}
                 initialAmount={amounts[relief.id]}
                 style={{
                   zIndex: reliefs.length - idx,
