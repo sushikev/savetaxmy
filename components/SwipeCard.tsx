@@ -70,7 +70,7 @@ export default function SwipeCard({ relief, onSwipe, exitDirection, style, showA
       transition={{ duration: 0.3 }}
       className="absolute w-full max-w-[90%] sm:max-w-[400px] cursor-grab active:cursor-grabbing touch-manipulation"
     >
-      <div className="bg-white rounded-3xl shadow-2xl p-6 select-none relative">
+      <div className="bg-white rounded-3xl shadow-2xl p-6 select-none relative overflow-hidden">
         {/* Exit Animations - Big X and Checkmark */}
         {exitDirection && (
           <motion.div
@@ -91,7 +91,7 @@ export default function SwipeCard({ relief, onSwipe, exitDirection, style, showA
         )}
 
         {/* Swipe Indicators */}
-        <div className="absolute top-4 left-4 right-4 flex justify-between pointer-events-none">
+        <div className="absolute top-4 left-4 right-4 flex justify-between pointer-events-none z-10">
           <motion.div
             style={{ opacity: useTransform(x, [-100, 0], [1, 0]) }}
             className="bg-red-500 text-white px-4 py-2 rounded-full font-bold text-sm"
@@ -106,8 +106,8 @@ export default function SwipeCard({ relief, onSwipe, exitDirection, style, showA
           </motion.div>
         </div>
 
-        {/* Card Content */}
-        <div className="mt-12">
+        {/* Card Content - Scrollable */}
+        <div className="mt-12 max-h-[calc(100vh-280px)] overflow-y-auto overscroll-contain">
           <div className="text-7xl text-center mb-4">{relief.icon}</div>
 
           <div className="mb-3">
